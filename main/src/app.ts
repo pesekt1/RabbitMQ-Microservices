@@ -21,6 +21,7 @@ createConnection().then((db) => {
           throw error1;
         }
 
+        //declaring queues for each event
         channel.assertQueue("product_created", { durable: false });
         channel.assertQueue("product_updated", { durable: false });
         channel.assertQueue("product_deleted", { durable: false });
@@ -39,6 +40,7 @@ createConnection().then((db) => {
 
         app.use(express.json());
 
+        //consuming messages from the queue
         channel.consume(
           "product_created",
           async (msg) => {
