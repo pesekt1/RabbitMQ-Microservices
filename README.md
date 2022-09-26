@@ -262,7 +262,7 @@ channel.consume(
 
 
 Internal HTTP communication from main to admin server:
-When like button is clicked, likes value is increased and it is also propagated to the admin microservice using HTTP POST request.
+When like button is clicked, likes value is increased, database is updated, and it is also propagated to the admin microservice using HTTP POST request.
 ```ts
 app.post(
   "/api/products/:id/like",
