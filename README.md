@@ -10,7 +10,10 @@
 - Go to http://localhost:3000/admin/products - the admin page for products
 
 
-Architecture:
+System Architecture:
+
+![System Architecture](architecture.png)
+
 - admin: node.js express server in TypeScript using MySQL database (using TypeORM). Port 8000
 - main: node.js express server in TypeScript using MongoDB database (using TypeORM). Port 8001
 - react-frontend: React client. Port 3000
