@@ -1,5 +1,15 @@
 # Microservices with RabbitMQ
 
+## How to run the system
+- Create a free RabbitMQ message queue here: https://www.cloudamqp.com/
+- Use the RabbitMQ connection string in both admin and main microservice to connect to your cloud message queue.
+- install dependencies in all 3 apps (admin, main, react-frontend).
+- Run tsc compiler for both admin and main microservice (to generate JavaScript files)
+- Open 3 terminals and start all three apps.
+- Go to http://localhost:3000 - the main react-frontend page
+- Go to http://localhost:3000/admin/products - the admin page for products
+
+
 Architecture:
 - admin: node.js express server in TypeScript using MySQL database (using TypeORM). Port 8000
 - main: node.js express server in TypeScript using MongoDB database (using TypeORM). Port 8001
