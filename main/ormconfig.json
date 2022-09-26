@@ -1,0 +1,11 @@
+{
+  "type": "mongodb",
+  "host": "localhost",
+  "database": "yt_node_main",
+  "useUnifiedTopology": true,
+  "synchronize": true,
+  "entities": ["src/entity/*.js"],
+  "cli": {
+    "entitiesDir": "src/entity"
+  }
+}
