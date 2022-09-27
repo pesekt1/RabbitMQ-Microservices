@@ -44,7 +44,7 @@ var product_1 = require("./entity/product");
 var axios_1 = require("axios");
 (0, typeorm_1.createConnection)().then(function (db) {
     var productRepository = db.getMongoRepository(product_1.Product);
-    amqp.connect("amqps://xeaejhjy:JkwWKBckNuKx9milhwF3atbBu2Ao_HX-@shark.rmq.cloudamqp.com/xeaejhjy", function (error0, connection) {
+    amqp.connect(process.env.RABBIT_MQ_URL, function (error0, connection) {
         if (error0) {
             throw error0;
         }
@@ -52,6 +52,7 @@ var axios_1 = require("axios");
             if (error1) {
                 throw error1;
             }
+            //declaring queues for each event
             channel.assertQueue("product_created", { durable: false });
             channel.assertQueue("product_updated", { durable: false });
             channel.assertQueue("product_deleted", { durable: false });
@@ -64,6 +65,7 @@ var axios_1 = require("axios");
                 ],
             }));
             app.use(express.json());
+            //consuming messages from the queue
             channel.consume("product_created", function (msg) { return __awaiter(void 0, void 0, void 0, function () {
                 var eventProduct, product;
                 return __generator(this, function (_a) {
