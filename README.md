@@ -5,6 +5,14 @@
 - Use the RabbitMQ connection string in both admin and main microservice to connect to your cloud message queue: create .env file for both microservices and set: RABBIT_MQ_URL=<rabbitmq_url>
 - You can also run docker-compose up to run RabbitMQ locally. Then you can access the gui at http://localhost:15673/ and use the default username and password: guest/guest
 - install dependencies in all 4 apps (admin, main, main-frontend, admin-frontend).
+- add .env files for all 4 apps
+
+admin:
+```
+PORT=8002
+ADMIN_FRONTEND_PORT=3002
+```
+
 - Run tsc compiler for both admin and main backend microservices (to generate JavaScript files)
 - Open 4 terminals and start all 4 apps.
 - Go to http://localhost:3001 - the main react-frontend page
