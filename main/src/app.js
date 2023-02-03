@@ -59,7 +59,7 @@ var axios_1 = require("axios");
             var app = express();
             app.use(cors({
                 origin: [
-                    "http://localhost:3001",
+                    "http://localhost:".concat(process.env.MAIN_FRONTEND_PORT),
                     "http://localhost:8080",
                     "http://localhost:4200",
                 ],
@@ -153,7 +153,7 @@ var axios_1 = require("axios");
                 });
             }); });
             console.log("Listening to port: " + process.env.PORT);
-            app.listen(8001);
+            app.listen(process.env.PORT);
             process.on("beforeExit", function () {
                 console.log("closing");
                 connection.close();

@@ -54,7 +54,7 @@ var amqp = require("amqplib/callback_api");
             var app = express();
             app.use(cors({
                 origin: [
-                    "http://localhost:3002",
+                    "http://localhost:".concat(process.env.ADMIN_FRONTEND_PORT),
                     "http://localhost:8080",
                     "http://localhost:4200",
                 ],
@@ -141,8 +141,8 @@ var amqp = require("amqplib/callback_api");
                     }
                 });
             }); });
-            console.log("Listening to port: 8000");
-            app.listen(8000);
+            console.log("Listening to port: " + process.env.PORT);
+            app.listen(process.env.PORT);
             process.on("beforeExit", function () {
                 console.log("closing");
                 connection.close();
