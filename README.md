@@ -13,7 +13,7 @@
 
 System Architecture:
 
-![System Architecture](architecture.png)
+![System Architecture](architecture_v2.png)
 
 - admin: node.js express server in TypeScript using MySQL database (using TypeORM). Port 8000
 - main: node.js express server in TypeScript using MongoDB database (using TypeORM). Port 8001
