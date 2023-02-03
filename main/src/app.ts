@@ -98,7 +98,7 @@ createConnection().then((db) => {
       );
 
       console.log("Listening to port: " + process.env.PORT);
-      app.listen(8001);
+      app.listen(process.env.PORT);
       process.on("beforeExit", () => {
         console.log("closing");
         connection.close();
