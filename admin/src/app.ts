@@ -79,8 +79,8 @@ createConnection().then((db) => {
         }
       );
 
-      console.log("Listening to port: 8000");
-      app.listen(8000);
+      console.log("Listening to port: " + process.env.PORT);
+      app.listen(process.env.PORT);
       process.on("beforeExit", () => {
         console.log("closing");
         connection.close();
