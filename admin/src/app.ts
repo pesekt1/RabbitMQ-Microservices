@@ -23,7 +23,7 @@ createConnection().then((db) => {
       app.use(
         cors({
           origin: [
-            "http://localhost:3002",
+            `http://localhost:${process.env.ADMIN_FRONTEND_PORT}`,
             "http://localhost:8080",
             "http://localhost:4200",
           ],
