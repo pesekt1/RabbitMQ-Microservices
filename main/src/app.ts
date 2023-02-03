@@ -88,7 +88,7 @@ createConnection().then((db) => {
         async (req: Request, res: Response) => {
           const product = await productRepository.findOne(req.params.id);
           await axios.post(
-            `http://localhost:8000/api/products/${product.admin_id}/like`,
+            `http://localhost:${process.env.ADMIN_PORT}/api/products/${product.admin_id}/like`,
             {}
           );
           product.likes++;
@@ -97,7 +97,7 @@ createConnection().then((db) => {
         }
       );
 
-      console.log("Listening to port: 8001");
+      console.log("Listening to port: " + process.env.PORT);
       app.listen(8001);
       process.on("beforeExit", () => {
         console.log("closing");

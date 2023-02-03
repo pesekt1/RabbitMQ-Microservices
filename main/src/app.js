@@ -141,7 +141,7 @@ var axios_1 = require("axios");
                         case 0: return [4 /*yield*/, productRepository.findOne(req.params.id)];
                         case 1:
                             product = _a.sent();
-                            return [4 /*yield*/, axios_1.default.post("http://localhost:8000/api/products/".concat(product.admin_id, "/like"), {})];
+                            return [4 /*yield*/, axios_1.default.post("http://localhost:".concat(process.env.ADMIN_PORT, "/api/products/").concat(product.admin_id, "/like"), {})];
                         case 2:
                             _a.sent();
                             product.likes++;
@@ -152,7 +152,7 @@ var axios_1 = require("axios");
                     }
                 });
             }); });
-            console.log("Listening to port: 8001");
+            console.log("Listening to port: " + process.env.PORT);
             app.listen(8001);
             process.on("beforeExit", function () {
                 console.log("closing");
