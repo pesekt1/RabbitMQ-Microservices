@@ -2,15 +2,36 @@
 
 ## How to run the system
 - Create a free RabbitMQ message queue here: https://www.cloudamqp.com/
-- Use the RabbitMQ connection string in both admin and main microservice to connect to your cloud message queue: create .env file for both microservices and set: RABBIT_MQ_URL=<rabbitmq_url>
+- Use the RabbitMQ connection string in both admin and main microservice to connect to your cloud message queue.
 - You can also run docker-compose up to run RabbitMQ locally. Then you can access the gui at http://localhost:15673/ and use the default username and password: guest/guest
 - install dependencies in all 4 apps (admin, main, main-frontend, admin-frontend).
 - add .env files for all 4 apps
 
 admin:
 ```
+RABBIT_MQ_URL=<rabbitmq_url>
 PORT=8002
 ADMIN_FRONTEND_PORT=3002
+```
+
+admin-frontend:
+```
+PORT=3002
+REACT_APP_API_URL=http://localhost:8002/api
+```
+
+main:
+```
+RABBIT_MQ_URL=<rabbitmq_url>
+PORT=8001
+ADMIN_PORT=8002
+MAIN_FRONTEND_PORT=3001
+```
+
+main-frontend:
+```
+PORT=3001
+REACT_APP_API_URL=http://localhost:8001/api
 ```
 
 - Run tsc compiler for both admin and main backend microservices (to generate JavaScript files)
