@@ -8,7 +8,7 @@ const Products = () => {
 
   useEffect(() => {
     (async () => {
-      const response = await fetch("http://localhost:8000/api/products");
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/products`);
 
       const data = await response.json();
 
@@ -18,7 +18,7 @@ const Products = () => {
 
   const del = async (id: number) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
-      await fetch(`http://localhost:8000/api/products/${id}`, {
+      await fetch(`${process.env.REACT_APP_API_URL}/products/${id}`, {
         method: "DELETE",
       });
 

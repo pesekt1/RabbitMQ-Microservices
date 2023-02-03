@@ -10,7 +10,7 @@ const ProductsCreate = () => {
   const submit = async (e: SyntheticEvent) => {
     e.preventDefault();
 
-    await fetch("http://localhost:8000/api/products", {
+    await fetch(`${process.env.REACT_APP_API_URL}/products`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -23,7 +23,7 @@ const ProductsCreate = () => {
   };
 
   if (redirect) {
-    return <Redirect to={"/products"} />;
+    return <Redirect to={"/"} />;
   }
 
   return (

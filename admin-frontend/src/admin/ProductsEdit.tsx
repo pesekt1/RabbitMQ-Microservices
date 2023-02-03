@@ -16,7 +16,7 @@ const ProductsEdit = (props: PropsWithRef<any>) => {
   useEffect(() => {
     (async () => {
       const response = await fetch(
-        `http://localhost:8000/api/products/${props.match.params.id}`
+        `${process.env.REACT_APP_API_URL}/products/${props.match.params.id}`
       );
 
       const product: Product = await response.json();
@@ -29,20 +29,23 @@ const ProductsEdit = (props: PropsWithRef<any>) => {
   const submit = async (e: SyntheticEvent) => {
     e.preventDefault();
 
-    await fetch(`http://localhost:8000/api/products/${props.match.params.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title,
-        image,
-      }),
-    });
+    await fetch(
+      `${process.env.REACT_APP_API_URL}/products/${props.match.params.id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          image,
+        }),
+      }
+    );
 
     setRedirect(true);
   };
 
   if (redirect) {
-    return <Redirect to={"/products"} />;
+    return <Redirect to={"/"} />;
   }
 
   return (
