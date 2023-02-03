@@ -4,6 +4,7 @@
 - Create a free RabbitMQ message queue here: https://www.cloudamqp.com/
 - Use the RabbitMQ connection string in both admin and main microservice to connect to your cloud message queue.
 - You can also run docker-compose up to run RabbitMQ locally. Then you can access the gui at http://localhost:15673/ and use the default username and password: guest/guest
+- if you dont have local MongoDB server and MySQL server then you can run docker images.
 - install dependencies in all 4 apps (admin, main, main-frontend, admin-frontend).
 - add .env files for all 4 apps
 
@@ -44,18 +45,17 @@ System Architecture:
 
 ![System Architecture](architecture_v3.png)
 
-- admin: node.js express server in TypeScript using MySQL database (using TypeORM). Port 8000
-- main: node.js express server in TypeScript using MongoDB database (using TypeORM). Port 8001
-- react-frontend: React client. Port 3000
+- admin: node.js express server in TypeScript using MySQL database (using TypeORM).
+- main: node.js express server in TypeScript using MongoDB database (using TypeORM).
 
-React client talks with main server via REST API. 
+- React clients talks with their microservices via REST API. 
 
 Main server and admin server communicate via RabbitMQ but there is also an internal HTTP communication between them.
 
 ## React client
-React client has 2 parts:
-- main page: Showing the products and a like button for each product.
-- admin page (with forms for editing and creating new products)
+React clients:
+- main client app: Showing the products and a like button for each product.
+- admin client app: products page + forms for editing and creating new products. Admin can also delete products.
 
 ### Main page:
 HTTP communication with the main server microservice.
@@ -68,7 +68,7 @@ const Main = () => {
     useEffect(() => {
         (
             async () => {
-                const response = await fetch('http://localhost:8001/api/products');
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/products`);
 
                 const data = await response.json();
 
@@ -78,7 +78,7 @@ const Main = () => {
     }, []);
 
     const like = async (id: number) => {
-        await fetch(`http://localhost:8001/api/products/${id}/like`, {
+        await fetch(`${process.env.REACT_APP_API_URL}/products/${id}/like`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'}
         });
@@ -87,7 +87,7 @@ const Main = () => {
 ### Admin product page: Admin can see, add, edit, and delete products.
 HTTP communication with the admin server microservice.
 
-Getting and deleting products from the admin microservice: http://localhost:3000/admin/products
+Getting and deleting products from the admin microservice:
 ```tsx
 const Products = () => {
     const [products, setProducts] = useState([]);
@@ -95,7 +95,7 @@ const Products = () => {
     useEffect(() => {
         (
             async () => {
-                const response = await fetch('http://localhost:8000/api/products');
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/products`);
 
                 const data = await response.json();
 
@@ -106,7 +106,7 @@ const Products = () => {
 
     const del = async (id: number) => {
         if (window.confirm('Are you sure you want to delete this product?')) {
-            await fetch(`http://localhost:8000/api/products/${id}`, {
+            await fetch(`${process.env.REACT_APP_API_URL}/products/${id}`, {
                 method: 'DELETE'
             });
 
@@ -117,7 +117,7 @@ const Products = () => {
 
 Adding a product:
 ```tsx
-await fetch('http://localhost:8000/api/products', {
+await fetch(`${process.env.REACT_APP_API_URL}/products`, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({
@@ -129,18 +129,16 @@ await fetch('http://localhost:8000/api/products', {
 
 Editing a product:
 ```tsx
-await fetch(`http://localhost:8000/api/products/${props.match.params.id}`, {
-    method: 'PUT',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-        title,
-        image
-    })
-});
+    await fetch(
+      `${process.env.REACT_APP_API_URL}/products/${props.match.params.id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          image,
+        }),
 ```
-
-TODO: Create a proper menu with LINKs to the components. Refactor the code.
-
 
 ## Admin server microservice
 MySQL database with TypeORM.
@@ -302,7 +300,7 @@ app.post(
   async (req: Request, res: Response) => {
     const product = await productRepository.findOne(req.params.id);
     await axios.post(
-      `http://localhost:8000/api/products/${product.admin_id}/like`,
+      `http://localhost:${process.env.ADMIN_PORT}/api/products/${product.admin_id}/like`,
       {}
     );
     product.likes++;
