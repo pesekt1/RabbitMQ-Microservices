@@ -3,7 +3,7 @@
 ## How to run the system
 - Create a free RabbitMQ message queue here: https://www.cloudamqp.com/
 - Use the RabbitMQ connection string in both admin and main microservice to connect to your cloud message queue.
-- You can also run docker-compose up to run RabbitMQ locally. Then you can access the gui at http://localhost:15673/ and use the default username and password: guest/guest
+- You can also run docker-compose up (using the docker-compose.yml file) or install RabbitMQ to run RabbitMQ locally. Then you can access the gui at http://localhost:15673/ and use the default username and password: guest/guest (the docker compose connection will be: amqp://guest:guest@localhost:5673)
 - if you dont have local MongoDB server and MySQL server then you can run docker images.
 - install dependencies in all 4 apps (admin, main, main-frontend, admin-frontend).
 - add .env files for all 4 apps
