@@ -18,6 +18,7 @@ const Main = () => {
     await fetch(`${process.env.REACT_APP_API_URL}/products/${id}/like`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: id }),
     });
 
     setProducts(

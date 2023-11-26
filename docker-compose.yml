@@ -1,16 +1,95 @@
-version: "3.2"
+version: "3.8"
 services:
   rabbitmq:
     image: rabbitmq:3.8-management-alpine
     container_name: 'rabbitmq'
     ports:
-        - 5673:5672
-        - 15673:15672
+      - 5673:5672
+      - 15673:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
     volumes:
-        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
     networks:
-        - rabbitmq_nodejs
+      - microservices
+  mongodb:
+    image: "mongo:7.0.0"
+    container_name: "mongo"
+    ports:
+      - "27018:27017"
+    networks:
+      - microservices
+    environment:
+      MONGO_INITDB_DATABASE: yt_node_main
+  # mongo-seeder:
+  #   build:
+  #     context: ./mongo-seeder
+  #     dockerfile: Dockerfile.seeder
+  #   depends_on:
+  #     - mongodb
+  #   environment:
+  #     MONGO_URI: mongodb://mongodb:27017/yt_node_main
+  #   networks:
+  #     - microservices
+  main:
+    build: ./main
+    ports:
+      - "8001:8001"
+    environment:
+      RABBIT_MQ_URL: "amqp://guest:guest@rabbitmq:5672/"
+      PORT: 8001
+      ADMIN_PORT: 8002
+      MAIN_FRONTEND_PORT: 3001
+    depends_on:
+      - mongodb
+      - rabbitmq
+    networks:
+      - microservices
+  main-frontend:
+    build: ./main-frontend
+    ports:
+      - 3001:3001
+    environment:
+      REACT_APP_API_URL: http://localhost:8001/api
+      PORT: 3001
+    networks:
+      - microservices
+  admin:
+    build: ./admin
+    ports:
+      - 8002:8002
+    depends_on:
+      - rabbitmq
+      - mysql
+    environment:
+      RABBIT_MQ_URL: "amqp://guest:guest@rabbitmq:5672/"
+      PORT: 8002
+      ADMIN_FRONTEND_PORT: 3002
+    networks:
+      - microservices
+  admin-frontend:
+    build: ./admin-frontend
+    ports:
+      - 3002:3002
+    environment:
+      REACT_APP_API_URL: http://localhost:8002/api
+      PORT: 3002
+    networks:
+      - microservices
+  mysql:
+    image: mysql:latest
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: yt_node_admin
+      MYSQL_USER: yt_node
+      MYSQL_PASSWORD: 123456
+    ports:
+      - "3307:3306"
+    networks:
+      - microservices
 networks:
-  rabbitmq_nodejs:
+  microservices:
     driver: bridge

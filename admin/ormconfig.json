@@ -1,10 +1,6 @@
 {
   "type": "mysql",
-  "host": "localhost",
-  "port": 3306,
-  "username": "yt_node",
-  "password": "123456",
-  "database": "yt_node_admin",
+  "url": "mysql://yt_node:123456@mysql:3306/yt_node_admin",
   "entities": ["src/entity/*.js"],
   "logging": true,
   "synchronize": true
