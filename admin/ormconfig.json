@@ -1,7 +1,0 @@
-{
-  "type": "mysql",
-  "url": "mysql://yt_node:123456@mysql:3306/yt_node_admin",
-  "entities": ["src/entity/*.js"],
-  "logging": true,
-  "synchronize": true
-}

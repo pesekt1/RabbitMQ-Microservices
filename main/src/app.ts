@@ -1,16 +1,17 @@
 import * as express from "express";
 import { Request, Response } from "express";
 import * as cors from "cors";
-import { createConnection } from "typeorm";
 import * as amqp from "amqplib/callback_api";
 import { Product } from "./entity/product";
 import axios from "axios";
+import { AppDataSource } from "./data-source";
+import { DataSource } from "typeorm";
 
-createConnection().then((db) => {
+AppDataSource.initialize().then((db) => {
   connect(db);
 });
 
-function connect(db) {
+function connect(db: DataSource) {
   const productRepository = db.getMongoRepository(Product);
 
   amqp.connect(process.env.RABBIT_MQ_URL, (error0, connection) => {
@@ -63,7 +64,7 @@ function connect(db) {
           "product_updated",
           async (msg) => {
             const eventProduct: Product = JSON.parse(msg.content.toString());
-            const product = await productRepository.findOne({
+            const product = await productRepository.findOneBy({
               admin_id: parseInt(eventProduct.id),
             });
             productRepository.merge(product, {
@@ -101,7 +102,7 @@ function connect(db) {
           "/api/products/:id/like",
           async (req: Request, res: Response) => {
             console.log("Main: product id: " + req.params.id);
-            const product = await productRepository.findOne(req.params.id);
+            const product = await productRepository.findOneBy(req.params.id);
             console.log("Main: product title: " + product.title);
             await axios.post(
               `http://admin:${process.env.ADMIN_PORT}/api/products/like`,

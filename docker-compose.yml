@@ -23,6 +23,7 @@ services:
       - microservices
     environment:
       MONGO_INITDB_DATABASE: yt_node_main
+  # mongo seeder was removed because mongoDB should be synced with mysql
   # mongo-seeder:
   #   build:
   #     context: ./mongo-seeder
@@ -38,7 +39,8 @@ services:
     ports:
       - "8001:8001"
     environment:
-      RABBIT_MQ_URL: "amqp://guest:guest@rabbitmq:5672/"
+      RABBIT_MQ_URL: "amqp://guest:guest@rabbitmq:5672/" #communicating with rabbitmq container - not localhost
+      MONGO_URL: mongodb://mongodb:27017/yt_node_main #communicating with mongodb container - not localhost
       PORT: 8001
       ADMIN_PORT: 8002
       MAIN_FRONTEND_PORT: 3001
@@ -64,7 +66,8 @@ services:
       - rabbitmq
       - mysql
     environment:
-      RABBIT_MQ_URL: "amqp://guest:guest@rabbitmq:5672/"
+      MYSQL_DATABASE_URL: mysql://yt_node:123456@mysql:3306/yt_node_admin #communicating with mysql container - not localhost
+      RABBIT_MQ_URL: "amqp://guest:guest@rabbitmq:5672/" #communicating with rabbitmq container - not localhost
       PORT: 8002
       ADMIN_FRONTEND_PORT: 3002
     networks:

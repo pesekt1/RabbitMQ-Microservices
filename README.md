@@ -310,3 +310,16 @@ app.post(
 );
 ```
 
+## TODO
+Create a seeder service for MySQL and MongoDB - create some initial data for the databases.
+
+Optimize the Dockerfiles - use multi-stage builds.
+
+
+# working with docker-compose
+
+rebuilding and running a single service withing docker-compose:
+```
+docker-compose up --build -d admin
+```
+

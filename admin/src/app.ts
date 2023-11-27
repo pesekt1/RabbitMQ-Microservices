@@ -1,15 +1,16 @@
 import * as express from "express";
 import { Request, Response } from "express";
 import * as cors from "cors";
-import { createConnection } from "typeorm";
+import { DataSource, createConnection } from "typeorm";
 import { Product } from "./entity/product";
 import * as amqp from "amqplib/callback_api";
+import { AppDataSource } from "./data-source";
 
-createConnection().then((db) => {
+AppDataSource.initialize().then((db) => {
   connect(db);
 });
 
-function connect(db) {
+function connect(db: DataSource) {
   const productRepository = db.getRepository(Product);
 
   amqp.connect(process.env.RABBIT_MQ_URL, (error0, connection) => {
@@ -57,12 +58,16 @@ function connect(db) {
         });
 
         app.get("/api/products/:id", async (req: Request, res: Response) => {
-          const product = await productRepository.findOne(req.params.id);
+          const product = await productRepository.findOneBy({
+            id: Number(req.params.id),
+          });
           return res.send(product);
         });
 
         app.put("/api/products/:id", async (req: Request, res: Response) => {
-          const product = await productRepository.findOne(req.params.id);
+          const product = await productRepository.findOneBy({
+            id: Number(req.params.id),
+          });
           productRepository.merge(product, req.body);
           const result = await productRepository.save(product);
           channel.sendToQueue(
