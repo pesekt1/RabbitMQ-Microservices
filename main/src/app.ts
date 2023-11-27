@@ -110,7 +110,7 @@ function connect(db: DataSource) {
 
             await axios.post(
               `http://admin:${process.env.ADMIN_PORT}/api/products/like`,
-              { title: product.title }
+              { admin_id: product.admin_id }
             );
             product.likes++;
             await productRepository.save(product);

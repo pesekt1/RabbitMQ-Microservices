@@ -84,16 +84,16 @@ function connect(db: DataSource) {
         });
 
         app.post("/api/products/like", async (req: Request, res: Response) => {
-          const title = req.body.title;
+          const admin_id = req.body.admin_id;
 
-          if (!title) {
-            return res.status(400).send({ error: "Product title is required" });
+          if (!admin_id) {
+            return res.status(400).send({ error: "No id provided" });
           }
 
           try {
             const product = await productRepository.findOne({
               where: {
-                title: title,
+                id: admin_id,
               },
             });
             if (!product) {
