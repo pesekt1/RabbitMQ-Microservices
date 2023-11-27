@@ -1,5 +1,10 @@
 # Microservices with RabbitMQ
 
+## TODO
+Optimize the Dockerfiles - use multi-stage builds.
+
+
+
 ## How to run the system
 - Create a free RabbitMQ message queue here: https://www.cloudamqp.com/
 - Use the RabbitMQ connection string in both admin and main microservice to connect to your cloud message queue.
@@ -40,6 +45,17 @@ REACT_APP_API_URL=http://localhost:8001/api
 - Go to http://localhost:3001 - the main react-frontend page
 - Go to http://localhost:3002 - the admin page for products
 
+
+There are also seeders for MySQL and MongoDB databases. You can run them to populate the databases with some data.
+mongo-seeder/.evn:
+```bash
+MONGO_URL=<your_mongo_url>
+```
+
+mysql-seeder/.evn:
+```bash
+MYSQL_DATABASE_URL=<your_mysql_url>
+```
 
 System Architecture:
 
@@ -143,20 +159,6 @@ Editing a product:
 ## Admin server microservice
 MySQL database with TypeORM.
 
-Config:
-```json
-{
-  "type": "mysql",
-  "host": "localhost",
-  "port": 3306,
-  "username": "yt_node",
-  "password": "123456",
-  "database": "yt_node_admin",
-  "entities": ["src/entity/*.js"],
-  "logging": true,
-  "synchronize": true
-}
-```
 Logging is enabled for the development - we can see all the sql queries.
 
 Product entity:
@@ -230,7 +232,7 @@ First admin creates saves a product in MySQL and then it sends a message to Rabb
 ## Main server microservice
 
 Similar to the admin server microservice:
-- config json for MongoDB, unfortunatelly, logging does not work for MongoDB in TypeORM
+- unfortunatelly, logging does not work for MongoDB in TypeORM
 - product entity with TypeORM
 - express server with RabbitMQ
 
@@ -295,28 +297,39 @@ channel.consume(
 Internal HTTP communication from main to admin server:
 When like button is clicked, likes value is increased, database is updated, and it is also propagated to the admin microservice using HTTP POST request.
 ```ts
-app.post(
-  "/api/products/:id/like",
-  async (req: Request, res: Response) => {
-    const product = await productRepository.findOne(req.params.id);
-    await axios.post(
-      `http://localhost:${process.env.ADMIN_PORT}/api/products/${product.admin_id}/like`,
-      {}
-    );
-    product.likes++;
-    await productRepository.save(product);
-    return res.send(product);
-  }
-);
+        app.post(
+          "/api/products/:id/like",
+          async (req: Request, res: Response) => {
+            const product = await productRepository.findOne({
+              where: {
+                _id: new ObjectId(req.params.id),
+              },
+            });
+
+            await axios.post(
+              `http://admin:${process.env.ADMIN_PORT}/api/products/like`,
+              { title: product.title }
+            );
+            product.likes++;
+            await productRepository.save(product);
+            return res.send(product);
+          }
+        );
 ```
 
-## TODO
-Create a seeder service for MySQL and MongoDB - create some initial data for the databases.
-
-Optimize the Dockerfiles - use multi-stage builds.
-
-
 # working with docker-compose
+docker-compose.yml file is used to run all services at once. It also creates a network for all services to communicate with each other.
+
+List of services:
+- admin: node.js express server in TypeScript using MySQL database (using TypeORM).
+- main: node.js express server in TypeScript using MongoDB database (using TypeORM).
+- admin-frontend: React client for admin service.
+- main-frontend: React client for main service.
+- mysql-seeder: MySQL database seeder.
+- mongo-seeder: MongoDB database seeder.
+- rabbitmq: RabbitMQ message queue.
+- mysql: MySQL database.
+- mongo: MongoDB database.
 
 rebuilding and running a single service withing docker-compose:
 ```bash

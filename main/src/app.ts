@@ -102,20 +102,10 @@ function connect(db: DataSource) {
         app.post(
           "/api/products/:id/like",
           async (req: Request, res: Response) => {
-            console.log("Main: product id: " + req.params.id);
-
             const product = await productRepository.findOne({
               where: {
                 _id: new ObjectId(req.params.id),
               },
-            });
-
-            console.log("Main: product: " + product);
-
-            const products = await productRepository.find();
-
-            products.forEach((product) => {
-              console.log("Main: product: " + product.id);
             });
 
             await axios.post(
