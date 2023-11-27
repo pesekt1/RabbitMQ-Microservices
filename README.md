@@ -57,7 +57,7 @@ mysql-seeder/.evn:
 MYSQL_DATABASE_URL=<your_mysql_url>
 ```
 
-System Architecture:
+## System Architecture:
 
 ![System Architecture](architecture_v2.png)
 
@@ -68,12 +68,12 @@ System Architecture:
 
 Main server and admin server communicate via RabbitMQ but there is also an internal HTTP communication between them.
 
-## React client
+### React client
 React clients:
 - main client app: Showing the products and a like button for each product.
 - admin client app: products page + forms for editing and creating new products. Admin can also delete products.
 
-### Main page:
+#### Main page:
 HTTP communication with the main server microservice.
 
 Showing all products + like button:
@@ -156,7 +156,7 @@ Editing a product:
         }),
 ```
 
-## Admin server microservice
+### Admin server microservice
 MySQL database with TypeORM.
 
 Logging is enabled for the development - we can see all the sql queries.
@@ -229,7 +229,7 @@ First admin creates saves a product in MySQL and then it sends a message to Rabb
         });
 ```
 
-## Main server microservice
+### Main server microservice
 
 Similar to the admin server microservice:
 - unfortunatelly, logging does not work for MongoDB in TypeORM
@@ -317,7 +317,7 @@ When like button is clicked, likes value is increased, database is updated, and 
         );
 ```
 
-# working with docker-compose
+## working with docker-compose
 docker-compose.yml file is used to run all services at once. It also creates a network for all services to communicate with each other.
 
 List of services:
