@@ -25,7 +25,7 @@ services:
       MONGO_INITDB_DATABASE: yt_node_main
   mysql-seeder:
     build:
-      context: ./mysql-seeder
+      context: ./seeders/mysql-seeder
       dockerfile: Dockerfile.seeder.prod
     depends_on:
       - mysql
@@ -35,7 +35,7 @@ services:
       - microservices
   mongo-seeder:
     build:
-      context: ./mongo-seeder
+      context: ./seeders/mongo-seeder
       dockerfile: Dockerfile.seeder.prod
     depends_on:
       - mongodb
