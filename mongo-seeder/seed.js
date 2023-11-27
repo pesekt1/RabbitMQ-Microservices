@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 // Connect to MongoDB
-
+console.log("Connecting to MongoDB at", process.env.MONGO_URL);
 mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -19,11 +19,12 @@ const Product = mongoose.model("Product", productSchema, "product");
 
 // Seed product collection
 const seedProducts = async () => {
+  console.log("Seeding.");
   try {
     await Product.deleteMany(); // Clear existing data
+
     await Product.insertMany([
       {
-        admin_id: 1,
         title: "Product 1",
         image: "https://picsum.photos/id/1/200/300",
         likes: 0,
@@ -37,8 +38,8 @@ const seedProducts = async () => {
 };
 
 // Start seeding when the MongoDB connection is established
-mongoose.connection.once("open", () => {
-  seedProducts();
+mongoose.connection.once("open", async () => {
+  await seedProducts();
   // Close the connection after seeding
   mongoose.connection.close();
 

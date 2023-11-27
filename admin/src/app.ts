@@ -48,7 +48,7 @@ function connect(db: DataSource) {
         });
 
         app.post("/api/products", async (req: Request, res: Response) => {
-          const product = await productRepository.create(req.body);
+          const product = productRepository.create(req.body);
           const result = await productRepository.save(product);
           channel.sendToQueue(
             "product_created",

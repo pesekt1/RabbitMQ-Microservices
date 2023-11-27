@@ -15,10 +15,6 @@ const sequelize = new Sequelize(process.env.MYSQL_DATABASE_URL, {
 const Product = sequelize.define(
   "product",
   {
-    admin_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
     title: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -35,6 +31,7 @@ const Product = sequelize.define(
   },
   {
     tableName: "product", // Explicitly define table name
+    timestamps: false, // Disable timestamps
   }
 );
 
