@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import products from "./products.js";
 
 // Connect to MongoDB
 console.log("Connecting to MongoDB at", process.env.MONGO_URL);
@@ -23,14 +24,7 @@ const seedProducts = async () => {
   try {
     await Product.deleteMany(); // Clear existing data
 
-    await Product.insertMany([
-      {
-        title: "Product 1",
-        image: "https://picsum.photos/id/1/200/300",
-        likes: 0,
-      },
-      // Add more products as needed
-    ]);
+    await Product.insertMany(products);
     console.log("Product collection seeded successfully.");
   } catch (error) {
     console.error("Error seeding product collection:", error);

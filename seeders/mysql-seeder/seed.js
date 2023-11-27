@@ -1,6 +1,7 @@
 // Import necessary modules
 import { Sequelize, DataTypes } from "sequelize";
 import dotenv from "dotenv";
+import products from "./products.js";
 
 // Load environment variables from .env
 dotenv.config();
@@ -41,12 +42,7 @@ const Product = sequelize.define(
     await sequelize.sync({ force: true }); // Drop and recreate tables
 
     // Seed the database with one product
-    await Product.create({
-      admin_id: 1,
-      title: "Product 1",
-      image: "https://picsum.photos/id/1/200/300",
-      likes: 0,
-    });
+    await Product.bulkCreate(products);
 
     console.log("Seed data inserted successfully.");
   } catch (error) {

@@ -333,9 +333,9 @@ List of services:
 - mysql: MySQL database.
 - mongo: MongoDB database.
 
-rebuilding and running a single service withing docker-compose:
+rebuilding and running a single service withing docker-compose (new image is always build):
 ```bash
-docker-compose up --build -d admin
+docker-compose build admin; docker-compose up -d --force-recreate admin
 ```
 
 Rebuilding and running all services withing docker-compose (images are build only if dockerfiles are changed):
