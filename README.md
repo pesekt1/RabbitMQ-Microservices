@@ -3,6 +3,8 @@
 ## TODO
 Optimize the Dockerfiles - use multi-stage builds.
 
+Update system architecture with seeders.
+
 
 
 ## How to run the system
@@ -343,6 +345,6 @@ docker-compose up --build -d
 
 Building and running all services withing docker-compose:
 ```bash
-docker-compose build && docker-compose up
+docker-compose build; docker-compose up
 ```
 
