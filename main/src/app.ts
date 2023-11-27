@@ -6,6 +6,7 @@ import { Product } from "./entity/product";
 import axios from "axios";
 import { AppDataSource } from "./data-source";
 import { DataSource } from "typeorm";
+import { ObjectId } from "mongodb";
 
 AppDataSource.initialize().then((db) => {
   connect(db);
@@ -102,8 +103,21 @@ function connect(db: DataSource) {
           "/api/products/:id/like",
           async (req: Request, res: Response) => {
             console.log("Main: product id: " + req.params.id);
-            const product = await productRepository.findOneBy(req.params.id);
-            console.log("Main: product title: " + product.title);
+
+            const product = await productRepository.findOne({
+              where: {
+                _id: new ObjectId(req.params.id),
+              },
+            });
+
+            console.log("Main: product: " + product);
+
+            const products = await productRepository.find();
+
+            products.forEach((product) => {
+              console.log("Main: product: " + product.id);
+            });
+
             await axios.post(
               `http://admin:${process.env.ADMIN_PORT}/api/products/like`,
               { title: product.title }

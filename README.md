@@ -319,7 +319,17 @@ Optimize the Dockerfiles - use multi-stage builds.
 # working with docker-compose
 
 rebuilding and running a single service withing docker-compose:
-```
+```bash
 docker-compose up --build -d admin
+```
+
+rebuilding and running all services withing docker-compose:
+```bash
+docker-compose up --build -d
+```
+
+Building and running all services withing docker-compose:
+```bash
+docker-compose build && docker-compose up
 ```
 

@@ -2,9 +2,7 @@ import mongoose from "mongoose";
 
 // Connect to MongoDB
 
-const MONGO_URI = "mongodb://mongodb:27017/yt_node_main";
-mongoose.connect(MONGO_URI, {
-  //mongoose.connect(process.env.MONGO_URI, {
+mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -41,4 +39,11 @@ const seedProducts = async () => {
 // Start seeding when the MongoDB connection is established
 mongoose.connection.once("open", () => {
   seedProducts();
+  // Close the connection after seeding
+  mongoose.connection.close();
+
+  console.log("MongoDB connection closed.");
+
+  // Exit the process when the seeding is complete
+  process.exit(0);
 });

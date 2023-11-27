@@ -23,17 +23,26 @@ services:
       - microservices
     environment:
       MONGO_INITDB_DATABASE: yt_node_main
-  # mongo seeder was removed because mongoDB should be synced with mysql
-  # mongo-seeder:
-  #   build:
-  #     context: ./mongo-seeder
-  #     dockerfile: Dockerfile.seeder
-  #   depends_on:
-  #     - mongodb
-  #   environment:
-  #     MONGO_URI: mongodb://mongodb:27017/yt_node_main
-  #   networks:
-  #     - microservices
+  mysql-seeder:
+    build:
+      context: ./mysql-seeder
+      dockerfile: Dockerfile.seeder
+    depends_on:
+      - mysql
+    environment:
+      MYSQL_DATABASE_URL: mysql://yt_node:123456@mysql:3306/yt_node_admin #communicating with mysql container - not localhost
+    networks:
+      - microservices
+  mongo-seeder:
+    build:
+      context: ./mongo-seeder
+      dockerfile: Dockerfile.seeder
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_URL: mongodb://mongodb:27017/yt_node_main
+    networks:
+      - microservices
   main:
     build: ./main
     ports:

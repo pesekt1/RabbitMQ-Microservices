@@ -154,7 +154,7 @@ function connect(db) {
                     });
                 }); });
                 app.post("/api/products/:id/like", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-                    var product;
+                    var product, products;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
@@ -162,13 +162,19 @@ function connect(db) {
                                 return [4 /*yield*/, productRepository.findOneBy(req.params.id)];
                             case 1:
                                 product = _a.sent();
-                                console.log("Main: product title: " + product.title);
-                                return [4 /*yield*/, axios_1.default.post("http://admin:".concat(process.env.ADMIN_PORT, "/api/products/like"), { title: product.title })];
+                                console.log("Main: product: " + product);
+                                return [4 /*yield*/, productRepository.find()];
                             case 2:
+                                products = _a.sent();
+                                products.forEach(function (product) {
+                                    console.log("Main: product: " + product.id);
+                                });
+                                return [4 /*yield*/, axios_1.default.post("http://admin:".concat(process.env.ADMIN_PORT, "/api/products/like"), { title: product.title })];
+                            case 3:
                                 _a.sent();
                                 product.likes++;
                                 return [4 /*yield*/, productRepository.save(product)];
-                            case 3:
+                            case 4:
                                 _a.sent();
                                 return [2 /*return*/, res.send(product)];
                         }
