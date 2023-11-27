@@ -107,6 +107,9 @@ function connect(db: DataSource) {
                 _id: new ObjectId(req.params.id),
               },
             });
+            if (!product) {
+              return res.status(404).send({ error: "Product not found" });
+            }
 
             await axios.post(
               `http://admin:${process.env.ADMIN_PORT}/api/products/like`,
