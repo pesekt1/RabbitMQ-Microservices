@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM node:18 as build
+FROM node:14 as build
 
 WORKDIR /app
 
@@ -16,6 +16,10 @@ FROM nginx:1.19.0-alpine as serve
 
 COPY --from=build /app/build /usr/share/nginx/html
 
-EXPOSE 80
+# Copy the nginx configuration file because the default settings is for port 80
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expose port 3002 for the application
+EXPOSE 3002
 
 CMD ["nginx", "-g", "daemon off;"]

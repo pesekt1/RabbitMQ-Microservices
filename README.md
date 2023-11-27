@@ -338,13 +338,49 @@ rebuilding and running a single service withing docker-compose:
 docker-compose up --build -d admin
 ```
 
-rebuilding and running all services withing docker-compose:
+Rebuilding and running all services withing docker-compose (images are build only if dockerfiles are changed):
 ```bash
-docker-compose up --build -d
+docker-compose up --build
 ```
 
-Building and running all services withing docker-compose:
+Building and running all services withing docker-compose (images are build even if dockerfiles are not changed):
 ```bash
 docker-compose build; docker-compose up
 ```
+
+If you want to exchange some service, for example you change mongoDb version in docker-compose.yml file, then you need to pull the image and run the service - you need to force the recreation of the service if another version is already running:
+```bash
+docker-compose pull mongodb; docker-compose up -d --force-recreate mongodb
+```
+
+Get rid of unused and dangling images:
+```bash
+docker image prune -a -f
+```
+
+## Optimizing Dockerfiles
+- use multi-stage builds
+
+### React.js applications:
+We can use 2 stages:
+- build stage: install dependencies and build the app
+- production stage: copy the build from the build stage and run the app using nginx
+
+Nginx default port is 80, but we can change it to another port for example 3001 in the nginx.conf file and then we can expose it in the dockerfile:
+
+```conf
+server {
+    listen 3001;
+    location / {
+        root /usr/share/nginx/html;
+        index index.html index.htm;
+        try_files $uri $uri/ /index.html =404;
+    }
+}
+```
+
+### Node.js applications:
+We can use 2 stages:
+- build stage: use robust node image to install dependencies and build the app
+- production stage: use lightweight node image (alpine) to copy the build from the build stage and run the app
 
