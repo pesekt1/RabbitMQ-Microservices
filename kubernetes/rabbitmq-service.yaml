@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: C:\Program Files\Kompose\kompose.exe convert
+    kompose.version: 1.31.2 (a92241f79)
+    prometheus.job: rabbitmq
+  creationTimestamp: null
+  labels:
+    io.kompose.service: rabbitmq
+  name: rabbitmq
+spec:
+  ports:
+    - name: "5673"
+      port: 5673
+      targetPort: 5672
+    - name: "15673"
+      port: 15673
+      targetPort: 15672
+  selector:
+    io.kompose.service: rabbitmq
+status:
+  loadBalancer: {}

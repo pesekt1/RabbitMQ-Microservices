@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Program Files\Kompose\kompose.exe convert
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: main
+  name: main
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: main
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Program Files\Kompose\kompose.exe convert
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/rabbitmq-microservices-microservices: "true"
+        io.kompose.service: main
+    spec:
+      containers:
+        - env:
+            - name: ADMIN_PORT
+              value: "8002"
+            - name: MAIN_FRONTEND_PORT
+              value: "3001"
+            - name: MONGO_URL
+              value: mongodb://mongodb:27017/yt_node_main
+            - name: PORT
+              value: "8001"
+            - name: RABBIT_MQ_URL
+              value: amqp://guest:guest@rabbitmq:5672/
+          image: main
+          name: main
+          ports:
+            - containerPort: 8001
+              hostPort: 8001
+              protocol: TCP
+          resources: {}
+      restartPolicy: Always
+status: {}

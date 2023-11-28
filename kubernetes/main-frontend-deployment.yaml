@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Program Files\Kompose\kompose.exe convert
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: main-frontend
+  name: main-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: main-frontend
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Program Files\Kompose\kompose.exe convert
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/rabbitmq-microservices-microservices: "true"
+        io.kompose.service: main-frontend
+    spec:
+      containers:
+        - env:
+            - name: PORT
+              value: "3001"
+            - name: REACT_APP_API_URL
+              value: http://localhost:8001/api
+          image: main-frontend
+          name: main-frontend
+          ports:
+            - containerPort: 3001
+              hostPort: 3001
+              protocol: TCP
+          resources: {}
+      restartPolicy: Always
+status: {}
