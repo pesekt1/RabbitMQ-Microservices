@@ -1,11 +1,11 @@
 # Microservices with RabbitMQ
 
 ## TODO
-Optimize the Dockerfiles - use multi-stage builds.
-
 Update system architecture with seeders.
 
+Database seeders are sometimes not connecting because the database services are not ready yet. We need to fix it by waiting for the database services to be ready.
 
+Figure out Prometheus and Grafana.
 
 ## How to run the system
 - Create a free RabbitMQ message queue here: https://www.cloudamqp.com/
@@ -351,6 +351,11 @@ docker-compose build; docker-compose up
 If you want to exchange some service, for example you change mongoDb version in docker-compose.yml file, then you need to pull the image and run the service - you need to force the recreation of the service if another version is already running:
 ```bash
 docker-compose pull mongodb; docker-compose up -d --force-recreate mongodb
+```
+
+Or if you just need to recreate it with new config from docker-compose.yml file:
+```bash
+docker-compose up -d --force-recreate rabbitmq
 ```
 
 Get rid of unused and dangling images:
