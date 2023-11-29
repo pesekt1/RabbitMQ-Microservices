@@ -1,19 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    kompose.cmd: C:\Program Files\Kompose\kompose.exe convert
-    kompose.version: 1.31.2 (a92241f79)
-  creationTimestamp: null
   labels:
     io.kompose.service: main-frontend
   name: main-frontend
 spec:
+  type: NodePort
   ports:
-    - name: "3001"
-      port: 3001
+    - name: "main-frontend"
+      port: 5001
       targetPort: 3001
+      nodePort: 31001
   selector:
     io.kompose.service: main-frontend
-status:
-  loadBalancer: {}

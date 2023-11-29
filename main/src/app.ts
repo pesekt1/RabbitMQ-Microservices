@@ -39,6 +39,7 @@ function connect(db: DataSource) {
               `http://localhost:${process.env.MAIN_FRONTEND_PORT}`,
               "http://localhost:8080",
               "http://localhost:4200",
+              "http://localhost:31001",
             ],
           })
         );
@@ -121,7 +122,7 @@ function connect(db: DataSource) {
           }
         );
 
-        console.log("Listening to port: " + process.env.PORT);
+        console.log("Test Test.Listening to port: " + process.env.PORT);
         app.listen(process.env.PORT);
         process.on("beforeExit", () => {
           console.log("closing");

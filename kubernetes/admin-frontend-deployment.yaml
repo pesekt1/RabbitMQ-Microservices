@@ -1,10 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: C:\Program Files\Kompose\kompose.exe convert
-    kompose.version: 1.31.2 (a92241f79)
-  creationTimestamp: null
   labels:
     io.kompose.service: admin-frontend
   name: admin-frontend
@@ -13,13 +9,8 @@ spec:
   selector:
     matchLabels:
       io.kompose.service: admin-frontend
-  strategy: {}
   template:
     metadata:
-      annotations:
-        kompose.cmd: C:\Program Files\Kompose\kompose.exe convert
-        kompose.version: 1.31.2 (a92241f79)
-      creationTimestamp: null
       labels:
         io.kompose.network/rabbitmq-microservices-microservices: "true"
         io.kompose.service: admin-frontend
@@ -28,14 +19,12 @@ spec:
         - env:
             - name: PORT
               value: "3002"
-            - name: REACT_APP_API_URL
-              value: http://localhost:8002/api
-          image: rabbitmq-microservices-admin-frontend
+            # - name: REACT_APP_API_URL # this does not work because the variable already exists in the container
+            #   value: http://admin:8002/api
+          image: pesekt1/rabbitmq-microservices-admin-frontend
           name: admin-frontend
           ports:
             - containerPort: 3002
-              hostPort: 3002
-              protocol: TCP
-          resources: {}
-      restartPolicy: Always
-status: {}
+              name: admin-frontend
+              # hostPort: 3002
+              # protocol: TCP

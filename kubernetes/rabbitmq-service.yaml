@@ -11,11 +11,11 @@ metadata:
   name: rabbitmq
 spec:
   ports:
-    - name: "5673"
-      port: 5673
+    - name: "5672"
+      port: 5672
       targetPort: 5672
-    - name: "15673"
-      port: 15673
+    - name: "15672"
+      port: 15672
       targetPort: 15672
   selector:
     io.kompose.service: rabbitmq

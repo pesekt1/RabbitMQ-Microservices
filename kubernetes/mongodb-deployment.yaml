@@ -32,7 +32,7 @@ spec:
           name: mongo
           ports:
             - containerPort: 27017
-              hostPort: 27018
+              hostPort: 27017
               protocol: TCP
           resources: {}
       restartPolicy: Always

@@ -1,19 +1,17 @@
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    kompose.cmd: C:\Program Files\Kompose\kompose.exe convert
-    kompose.version: 1.31.2 (a92241f79)
-  creationTimestamp: null
   labels:
     io.kompose.service: admin
   name: admin
 spec:
+  type: NodePort
   ports:
-    - name: "8002"
+    - name: "admin"
       port: 8002
       targetPort: 8002
+      nodePort: 31802
   selector:
     io.kompose.service: admin
-status:
-  loadBalancer: {}
+# status:
+#   loadBalancer: {}

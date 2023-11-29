@@ -36,12 +36,13 @@ spec:
               value: "8001"
             - name: RABBIT_MQ_URL
               value: amqp://guest:guest@rabbitmq:5672/
-          image: main
+          image: pesekt1/rabbitmq-microservices-main
           name: main
           ports:
             - containerPort: 8001
-              hostPort: 8001
-              protocol: TCP
-          resources: {}
-      restartPolicy: Always
-status: {}
+              name: main
+#               hostPort: 8001
+#               protocol: TCP
+#           resources: {}
+#       restartPolicy: Always
+# status: {}

@@ -11,7 +11,7 @@ metadata:
 spec:
   ports:
     - name: "3307"
-      port: 3307
+      port: 3306
       targetPort: 3306
   selector:
     io.kompose.service: mysql

@@ -389,3 +389,33 @@ We can use 2 stages:
 - build stage: use robust node image to install dependencies and build the app
 - production stage: use lightweight node image (alpine) to copy the build from the build stage and run the app
 
+
+## Kubernetes
+- Kubernetes is a container orchestration system.
+
+Generate Kubernetes manifests from docker-compose.yml file:
+
+install kompose:
+for Windows: download the latest release from github (exe file) and add it to the PATH
+
+generate kubernetes manifests (run in the same directory as docker-compose.yml file):
+```bash
+kompose convert
+```
+
+run kubernetes manifests:
+```bash
+kubectl apply -f <manifests_folder>
+```
+
+verify deployments:
+```bash
+kubectl get deployments
+kubectl get pods
+kubectl get services
+```
+
+delete deployments:
+```bash
+kubectl delete -f <manifests_folder>
+```

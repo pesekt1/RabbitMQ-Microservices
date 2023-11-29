@@ -34,12 +34,13 @@ spec:
               value: "8002"
             - name: RABBIT_MQ_URL
               value: amqp://guest:guest@rabbitmq:5672/
-          image: admin
+          image: pesekt1/rabbitmq-microservices-admin
           name: admin
           ports:
             - containerPort: 8002
-              hostPort: 8002
-              protocol: TCP
-          resources: {}
-      restartPolicy: Always
-status: {}
+              name: admin
+#               hostPort: 8002
+#               protocol: TCP
+#           resources: {}
+#       restartPolicy: Always
+# status: {}

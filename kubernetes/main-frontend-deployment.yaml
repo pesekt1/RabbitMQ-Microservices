@@ -30,12 +30,13 @@ spec:
               value: "3001"
             - name: REACT_APP_API_URL
               value: http://localhost:8001/api
-          image: main-frontend
+          image: pesekt1/rabbitmq-microservices-main-frontend
           name: main-frontend
           ports:
             - containerPort: 3001
-              hostPort: 3001
-              protocol: TCP
-          resources: {}
-      restartPolicy: Always
-status: {}
+              name: main-frontend
+#               hostPort: 3001
+#               protocol: TCP
+#           resources: {}
+#       restartPolicy: Always
+# status: {}
