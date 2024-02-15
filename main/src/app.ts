@@ -35,14 +35,20 @@ function connect(db: DataSource) {
 
         app.use(
           cors({
-            origin: [
-              `http://localhost:${process.env.MAIN_FRONTEND_PORT}`,
-              "http://localhost:8080",
-              "http://localhost:4200",
-              "http://localhost:31001",
-            ],
+            origin: "*",
           })
         );
+
+        // app.use(
+        //   cors({
+        //     origin: [
+        //       `http://localhost:${process.env.MAIN_FRONTEND_PORT}`,
+        //       "http://localhost:8080",
+        //       "http://localhost:4200",
+        //       "http://localhost:31001",
+        //     ],
+        //   })
+        // );
 
         app.use(express.json());
 
