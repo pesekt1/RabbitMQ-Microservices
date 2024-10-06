@@ -9,12 +9,12 @@ metadata:
     io.kompose.service: main
   name: main
 spec:
-  type: loadBalancer
+  type: LoadBalancer
   ports:
     - name: "main"
       port: 8001
       targetPort: 8001
-      nodePort: 31003
+      # nodePort: 31003
   selector:
     io.kompose.service: main
 # status:
