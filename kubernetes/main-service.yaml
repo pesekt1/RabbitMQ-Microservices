@@ -9,7 +9,7 @@ metadata:
     io.kompose.service: main
   name: main
 spec:
-  type: NodePort
+  type: loadBalancer
   ports:
     - name: "main"
       port: 8001
