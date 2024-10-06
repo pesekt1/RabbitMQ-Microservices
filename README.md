@@ -449,4 +449,11 @@ kubectl port-forward svc/main 8001:8001
 kubectl port-forward svc/admin 8002:8002
 ```
 
+Enable access for rabbitmq in the browser:
+```bash
+kubectl port-forward svc/rabbitmq 15672:15672
+```
+
+Access to the frontens in the browser on localhost ports is defined in the kubernetes service files.
+
 
