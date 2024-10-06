@@ -93,6 +93,12 @@ function connect(db: DataSource) {
         });
 
         app.get("/", async (req: Request, res: Response) => {
+          if (process.env.POD_NAME) {
+            return res.send(
+              `Hello from main service on kubernetes pod: ${process.env.POD_NAME}`
+            );
+          }
+
           return res.send("Hello from main service");
         });
 

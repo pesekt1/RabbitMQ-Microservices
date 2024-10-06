@@ -36,6 +36,10 @@ spec:
               value: "8001"
             - name: RABBIT_MQ_URL
               value: amqp://guest:guest@rabbitmq:5672/
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
           image: pesekt1/rabbitmq-microservices-main
           name: main
           ports:

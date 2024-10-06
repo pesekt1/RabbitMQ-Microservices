@@ -424,10 +424,10 @@ kubectl delete -f <manifests_folder>
 
 Create docker images and push them to your dockerhub:
 ```bash
-docker build -t pesekt1/rabbitmq-microservices-main-frontend -f .\Dockerfile.prod .
-docker build -t pesekt1/rabbitmq-microservices-main -f .\Dockerfile.prod .
-docker build -t pesekt1/rabbitmq-microservices-admin-frontend -f .\Dockerfile.prod .
-docker build -t pesekt1/rabbitmq-microservices-admin -f .\Dockerfile.prod .
+docker build -t pesekt1/rabbitmq-microservices-main-frontend -f Dockerfile.prod .
+docker build -t pesekt1/rabbitmq-microservices-main -f Dockerfile.prod .
+docker build -t pesekt1/rabbitmq-microservices-admin-frontend -f Dockerfile.prod .
+docker build -t pesekt1/rabbitmq-microservices-admin -f Dockerfile.prod .
 ```
 
 Push images to dockerhub:
@@ -456,4 +456,7 @@ kubectl port-forward svc/rabbitmq 15672:15672
 
 Access to the frontens in the browser on localhost ports is defined in the kubernetes service files.
 
+The main servcie is scaled to multiple replicas and a load balancer is used to distribute the traffic between them. On the root endpoint, you can see the pod name that served the request.
+For example: "Hello from main service on kubernetes pod: main-555c548584-wzgkj".
 
+This is implemented by setting env variable in the deployment file - POD_NAME and using it in the main endpoint.
