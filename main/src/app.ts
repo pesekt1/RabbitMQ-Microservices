@@ -124,12 +124,20 @@ function connect(db: DataSource) {
               return res.status(404).send({ error: "Product not found" });
             }
 
-            await axios.post(
-              `http://admin:${process.env.ADMIN_PORT}/api/products/like`,
-              { admin_id: product.admin_id }
-            );
             product.likes++;
             await productRepository.save(product);
+
+            try {
+              await axios.post(
+                `http://admin:${process.env.ADMIN_PORT}/api/products/like`,
+                { admin_id: product.admin_id }
+              );
+            } catch (error) {
+              console.log(
+                "Error while sending like event to admin service",
+                error
+              );
+            }
             return res.send(product);
           }
         );
