@@ -115,21 +115,33 @@ function connect(db: DataSource) {
               return;
             }
 
+            const queryRunner = db.createQueryRunner();
+            await queryRunner.connect();
+            await queryRunner.startTransaction();
+
             try {
-              const product = await productRepository.findOne({
+              const product = await queryRunner.manager.findOne(Product, {
                 where: {
                   id: admin_id,
                 },
+                lock: { mode: "pessimistic_write" },
               });
+
               if (!product) {
                 console.error("Product not found");
+                await queryRunner.rollbackTransaction();
                 return;
               }
+
               product.likes++;
-              await productRepository.save(product);
+              await queryRunner.manager.save(product);
+              await queryRunner.commitTransaction();
               console.log(`Product with admin_id ${admin_id} liked`);
             } catch (error) {
+              await queryRunner.rollbackTransaction();
               console.error("Error processing product_liked message", error);
+            } finally {
+              await queryRunner.release();
             }
           },
           { noAck: true }
