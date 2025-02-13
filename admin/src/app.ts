@@ -1,7 +1,7 @@
 import * as express from "express";
 import { Request, Response } from "express";
 import * as cors from "cors";
-import { DataSource, createConnection } from "typeorm";
+import { DataSource } from "typeorm";
 import { Product } from "./entity/product";
 import * as amqp from "amqplib/callback_api";
 import { AppDataSource } from "./data-source";
@@ -31,16 +31,6 @@ function connect(db: DataSource) {
             origin: "*",
           })
         );
-
-        // app.use(
-        //   cors({
-        //     origin: [
-        //       `http://localhost:${process.env.ADMIN_FRONTEND_PORT}`,
-        //       "http://localhost:8080",
-        //       "http://localhost:4200",
-        //     ],
-        //   })
-        // );
 
         app.use(express.json());
 
@@ -89,29 +79,61 @@ function connect(db: DataSource) {
           return res.send(result);
         });
 
-        app.post("/api/products/like", async (req: Request, res: Response) => {
-          const admin_id = req.body.admin_id;
+        // app.post("/api/products/like", async (req: Request, res: Response) => {
+        //   const admin_id = req.body.admin_id;
 
-          if (!admin_id) {
-            return res.status(400).send({ error: "No id provided" });
-          }
+        //   if (!admin_id) {
+        //     return res.status(400).send({ error: "No id provided" });
+        //   }
 
-          try {
-            const product = await productRepository.findOne({
-              where: {
-                id: admin_id,
-              },
-            });
-            if (!product) {
-              return res.status(404).send({ error: "Product not found" });
+        //   try {
+        //     const product = await productRepository.findOne({
+        //       where: {
+        //         id: admin_id,
+        //       },
+        //     });
+        //     if (!product) {
+        //       return res.status(404).send({ error: "Product not found" });
+        //     }
+        //     product.likes++;
+        //     const result = await productRepository.save(product);
+        //     return res.send(result);
+        //   } catch (error) {
+        //     console.log(error);
+        //   }
+        // });
+
+        // Consume messages from the product_liked queue
+        channel.assertQueue("product_liked", { durable: false });
+        channel.consume(
+          "product_liked",
+          async (msg) => {
+            const { admin_id } = JSON.parse(msg.content.toString());
+
+            if (!admin_id) {
+              console.error("No admin_id provided in the message");
+              return;
             }
-            product.likes++;
-            const result = await productRepository.save(product);
-            return res.send(result);
-          } catch (error) {
-            console.log(error);
-          }
-        });
+
+            try {
+              const product = await productRepository.findOne({
+                where: {
+                  id: admin_id,
+                },
+              });
+              if (!product) {
+                console.error("Product not found");
+                return;
+              }
+              product.likes++;
+              await productRepository.save(product);
+              console.log(`Product with admin_id ${admin_id} liked`);
+            } catch (error) {
+              console.error("Error processing product_liked message", error);
+            }
+          },
+          { noAck: true }
+        );
 
         console.log("Listening to port: " + process.env.PORT);
         app.listen(process.env.PORT);
