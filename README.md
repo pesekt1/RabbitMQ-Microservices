@@ -1,11 +1,9 @@
 # Microservices with RabbitMQ
 
 ## TODO
-Update system architecture with seeders.
-
-Database seeders are sometimes not connecting because the database services are not ready yet. We need to fix it by waiting for the database services to be ready.
-
-Figure out Prometheus and Grafana.
+- Microservices are sometimes not connecting because the database services are not ready yet. We need to fix it by waiting for the database services to be ready.
+Solution: wait-for-it.sh script in the dockerfiles.
+- Prometheus service is there but it is not really used for anything.
 
 ## How to run the system
 - Create a free RabbitMQ message queue here: https://www.cloudamqp.com/
