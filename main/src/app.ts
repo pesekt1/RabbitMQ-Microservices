@@ -30,6 +30,7 @@ function connect(db: DataSource) {
         channel.assertQueue("product_created", { durable: false });
         channel.assertQueue("product_updated", { durable: false });
         channel.assertQueue("product_deleted", { durable: false });
+        channel.assertQueue("product_liked", { durable: false });
 
         const app = express();
 
@@ -38,17 +39,6 @@ function connect(db: DataSource) {
             origin: "*",
           })
         );
-
-        // app.use(
-        //   cors({
-        //     origin: [
-        //       `http://localhost:${process.env.MAIN_FRONTEND_PORT}`,
-        //       "http://localhost:8080",
-        //       "http://localhost:4200",
-        //       "http://localhost:31001",
-        //     ],
-        //   })
-        // );
 
         app.use(express.json());
 
@@ -127,17 +117,31 @@ function connect(db: DataSource) {
             product.likes++;
             await productRepository.save(product);
 
+            // Send a POST request to the admin service
+            // try {
+            //   await axios.post(
+            //     `http://admin:${process.env.ADMIN_PORT}/api/products/like`,
+            //     { admin_id: product.admin_id }
+            //   );
+            // } catch (error) {
+            //   console.log(
+            //     "Error while sending like event to admin service",
+            //     error
+            //   );
+            // }
+
+            // Publish a message to RabbitMQ
             try {
-              await axios.post(
-                `http://admin:${process.env.ADMIN_PORT}/api/products/like`,
-                { admin_id: product.admin_id }
-              );
+              const message = JSON.stringify({ admin_id: product.admin_id });
+              channel.sendToQueue("product_liked", Buffer.from(message));
+              console.log("Sent 'product_liked' message to RabbitMQ");
             } catch (error) {
               console.log(
-                "Error while sending like event to admin service",
+                "Error while sending 'product_liked' message to RabbitMQ",
                 error
               );
             }
+
             return res.send(product);
           }
         );
